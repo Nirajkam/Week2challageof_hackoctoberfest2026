@@ -1,23 +1,38 @@
 # Pocket Ledger
 
-An offline-first receipt and invoice sorter for freelancers. Add photos or PDFs, extract vendor/date/amount/category locally with Gemma 3 through Ollama, organize copies into folders, and export an editable CSV.
+An offline-first receipt and invoice sorter for freelancers. Add photos or PDFs, extract vendor/date/amount/category using AI, organize copies into folders, and export an editable CSV.
+
+## ⚡ LLM Providers
+
+Pocket Ledger now supports **multiple LLM providers** — pick the one that fits your needs:
+
+| Provider | Models | Privacy | Cost |
+|----------|--------|---------|------|
+| **Ollama (Local)** | gemma3:4b, llava, moondream | 🔒 Fully offline | Free |
+| **OpenAI** | gpt-4o, gpt-4o-mini, gpt-4.1 | ☁️ Cloud | Pay-per-use |
+| **Google Gemini** | gemini-2.0-flash, gemini-2.5-flash/pro | ☁️ Cloud | Pay-per-use |
+| **Anthropic Claude** | claude-sonnet-4, claude-haiku-3.5 | ☁️ Cloud | Pay-per-use |
+| **Groq** | llama-4-scout | ☁️ Cloud | Pay-per-use |
+
+Switch providers from the sidebar — no code changes needed.
 
 ## Privacy
 
-- The app runs on your own computer and sends receipt content only to the Ollama service at `127.0.0.1`.
+- **Ollama mode:** the app runs on your own computer and sends receipt content only to the Ollama service at `127.0.0.1`. No internet needed.
+- **Cloud mode:** receipt images are sent to the selected provider's API. A clear warning is shown in the UI.
 - Streamlit is configured to listen only on `127.0.0.1`; browser usage statistics are disabled.
-- There are no cloud APIs, analytics, or external upload endpoints in the app.
 - Original files are never moved or changed; organized copies and `receipts.csv` are saved in the output folder.
-- Ollama and the model need to be installed/downloaded while online. After that, turn off your internet connection and process receipts locally.
 - Extracted values can be wrong. Review the table before using it for bookkeeping or tax reporting.
 
 ## Requirements
 
 - Python 3.10 or newer
-- [Ollama](https://ollama.com/download)
-- Gemma 3 (the default model is `gemma3:4b`)
+- For local/offline use: [Ollama](https://ollama.com/download) with a vision model
+- For cloud use: an API key from one of the supported providers
 
 ## Run
+
+### Option 1: Local with Ollama (free, private)
 
 Install Ollama and download the model once:
 
@@ -34,7 +49,36 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Open the local address Streamlit prints (usually `http://localhost:8501`). Start Ollama if it is not already running. Choose **Upload files** to add multiple receipts, or **Local folder** and enter a folder path to scan its files. Folder scanning checks that folder's top level, not subfolders. To use another locally installed Ollama model, enter its name in the sidebar or set `OLLAMA_MODEL` before launching.
+### Option 2: Cloud LLM (no Ollama needed)
+
+Set up and launch:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+Select a cloud provider in the sidebar and enter your API key. You can also set API keys as environment variables:
+
+```bash
+export OPENAI_API_KEY="sk-..."
+export GOOGLE_API_KEY="AI..."
+export ANTHROPIC_API_KEY="sk-ant-..."
+export GROQ_API_KEY="gsk_..."
+```
+
+## Usage
+
+Open the local address Streamlit prints (usually `http://localhost:8501`).
+
+1. **Choose a provider** in the sidebar (Ollama, OpenAI, Gemini, Claude, or Groq)
+2. **Select a model** or enter a custom model name
+3. **Add receipts** via file upload or local folder path
+4. **Click "Sort receipts"** to extract and organize
+5. **Review and edit** the extracted data in the table
+6. **Download the CSV** for bookkeeping
 
 ## Output
 
@@ -61,4 +105,3 @@ PDF, PNG, JPG/JPEG, WEBP, and TIFF. Text-based PDFs are read locally; image-only
 ```bash
 python -m unittest discover -s tests
 ```
-# Week2challageof_hackoctoberfest2026
