@@ -61,3 +61,4 @@ PDF, PNG, JPG/JPEG, WEBP, and TIFF. Text-based PDFs are read locally; image-only
 ```bash
 python -m unittest discover -s tests
 ```
+# Week2challageof_hackoctoberfest2026
